@@ -1,15 +1,31 @@
-public abstract class Piece {
+import java.awt.event.MouseAdapter;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.MouseEvent;
+
+public abstract class Piece extends JPanel {
     protected Square currSquare;
     protected String name;
     protected String color;
     protected String ImageFileName;
 
     protected Piece(String col, Square sq) {
+        // for testing purposes.
+        addMouseListener(new MouseAdapter() {
+            public void mousePressed(MouseEvent me) {
+                System.out.println("Name: " + name + "\n" + "X, Y: " + currSquare.getXCord() + ", " + currSquare.getYCord());
+            }
+        });
         this.currSquare = sq;
         this.color = col;
     }
 
+
     public abstract boolean isValidMove(Move m);
+
+    public void setBackgroundColor(Color c) {
+        super.setBackground(c);
+    }
 
     public Square getCurrSquare() {
         return currSquare;

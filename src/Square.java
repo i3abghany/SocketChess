@@ -17,8 +17,7 @@ public class Square extends JPanel {
         yCord = y;
         if ((xCord % 2 != 0 && yCord % 2 == 0) || (xCord % 2 == 0 && yCord % 2 != 0)) {
             super.setOpaque(true);
-        }
-        else {
+        } else {
             super.setBackground(Color.WHITE);
             super.setOpaque(true);
         }

@@ -13,24 +13,27 @@ import java.util.ArrayList;
 
 public class Board extends JFrame {
     static private final int DIM = 8;
+    static private final int DIM_N = 8;
+    static private final int DIM_M = 8;
     static private final int WIDTH_MARGIN = 15;
     static private final int HEIGHT_MARGIN = 38;
     static private Square[][] squares;
     static private ArrayList<Piece> pieces;
 
     public Board() throws IOException {
-        squares = new Square[DIM][DIM];
+        squares = new Square[DIM_N][DIM_M];
         initSquares();
         initPieces();
         super.setSize(DIM * Square.SQUARE_WIDTH + WIDTH_MARGIN, DIM * Square.SQUARE_WIDTH + HEIGHT_MARGIN);
+        super.add(new JPanel());
         super.setVisible(true);
         super.setResizable(false);
         super.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
 
     private void initSquares() {
-        for (int i = 0; i < DIM; i++) {
-            for (int j = 0; j < DIM; j++) {
+        for (int i = 0; i < DIM_M; i++) {
+            for (int j = 0; j < DIM_N; j++) {
                 squares[j][i] = new Square(i, j); // reversed j and i !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                 super.add(squares[j][i]);
             }
@@ -39,9 +42,39 @@ public class Board extends JFrame {
 
     private void initPieces() throws IOException {
         pieces = new ArrayList<>();
+//        testInit();
         initPawnRows();
         initBishops();
         initKnights();
+        initQueens();
+        initKings();
+        initRooks();
+    }
+
+    private void testInit() throws IOException {
+        for (int i = 0; i < DIM_N; i++) {
+            for (int j = 0; j < DIM_M; j++) {
+                initPieceCell("rook", squares[i][j], "white");
+            }
+        }
+    }
+
+    private void initRooks() throws IOException {
+        initPieceCell("rook", squares[0][0], "white");
+        initPieceCell("rook", squares[0][7], "white");
+
+        initPieceCell("rook", squares[7][0], "black");
+        initPieceCell("rook", squares[7][7], "black");
+    }
+
+    private void initKings() throws IOException {
+        initPieceCell("king", squares[0][3], "white");
+        initPieceCell("king", squares[7][3], "black");
+    }
+
+    private void initQueens() throws IOException {
+        initPieceCell("queen", squares[0][4], "white");
+        initPieceCell("queen", squares[7][4], "black");
     }
 
     private void initKnights() throws IOException {
@@ -64,28 +97,21 @@ public class Board extends JFrame {
         Piece p = PiecesFactory.getPiece(name, col);
         p.setCurrSquare(sq);
         pieces.add(p);
+        sq.setCurrentPiece(p);
+        sq.add(p);
+        sq.getCurrentPiece().setOpaque(false);
         BufferedImage img = ImageIO.read(new File(p.getImageFileName()));
         img = Scalr.resize(img, 40);
         JLabel picLabel = new JLabel(new ImageIcon(img));
-        sq.add(picLabel);
+        sq.getCurrentPiece().add(picLabel);
     }
 
     private void initPawnRows() throws IOException {
         for (int i = 0; i < DIM; i++) {
-            Pawn p = new Pawn("white", squares[1][i]);
-            pieces.add(p);
-            BufferedImage pawnImage = ImageIO.read(new File(p.getImageFileName()));
-            pawnImage = Scalr.resize(pawnImage, 40);
-            JLabel picLabel = new JLabel(new ImageIcon(pawnImage));
-            squares[1][i].add(picLabel);
+            initPieceCell("pawn", squares[1][i], "white");
         }
         for (int i = 0; i < DIM; i++) {
-            Pawn p = new Pawn("black", squares[6][i]);
-            pieces.add(p);
-            BufferedImage pawnImage = ImageIO.read(new File(p.getImageFileName()));
-            pawnImage = Scalr.resize(pawnImage, 40);
-            JLabel picLabel = new JLabel(new ImageIcon(pawnImage));
-            squares[6][i].add(picLabel);
+            initPieceCell("pawn", squares[6][i], "black");
         }
     }
 
@@ -94,6 +120,8 @@ public class Board extends JFrame {
     }
 
     public static void main(String[] args) throws IOException {
-        new Board();
+        Board b = new Board();
+        System.out.println(Board.getPieceAtIndex(7, 7).name);
+
     }
 }
