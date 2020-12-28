@@ -2,20 +2,21 @@ import org.imgscalr.Scalr;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
-
-// RANKS ARE ROWS.
-// FILES ARE COLS.
 
 public class Board extends JFrame {
     static private final int DIM = 8;
     static private final int WIDTH_MARGIN = 15;
     static private final int HEIGHT_MARGIN = 38;
     static private Square[][] squares;
+    static private Square[][] backupSquares;
     static public ArrayList<Piece> pieces;
+    public static Square prevSq = null;
+    public static Square backupPrevSq = null;
+    public static Square backupNextSq = null;
 
     public Board() throws IOException {
         squares = new Square[DIM][DIM];
@@ -23,7 +24,7 @@ public class Board extends JFrame {
         initPieces();
         super.setSize(DIM * Square.SQUARE_WIDTH + WIDTH_MARGIN, DIM * Square.SQUARE_WIDTH + HEIGHT_MARGIN);
         super.add(new JPanel());
-        Square.prevSq = new Square(10, 10);
+        prevSq = new Square(10, 10);
 
         super.setVisible(true);
         super.setResizable(false);
@@ -116,11 +117,21 @@ public class Board extends JFrame {
         return squares[j][i].getCurrentPiece();
     }
 
-    public static void main(String[] args) throws IOException {
-        new Board();
-    }
-
     public boolean isStalemate() {
         return false;
+    }
+
+    public static JComponent cloneSwingComponent(JComponent c) {
+        try {
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            ObjectOutputStream oos = new ObjectOutputStream(baos);
+            oos.writeObject(c);
+            ByteArrayInputStream bais = new ByteArrayInputStream(baos.toByteArray());
+            ObjectInputStream ois = new ObjectInputStream(bais);
+            return (JComponent) ois.readObject();
+        } catch (IOException|ClassNotFoundException ex) {
+            ex.printStackTrace();
+            return null;
+        }
     }
 }

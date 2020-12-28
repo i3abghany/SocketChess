@@ -3,13 +3,11 @@ import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 
 public class Square extends JPanel {
     private int xCord, yCord;
     private Piece currentPiece;
     public static final int SQUARE_WIDTH = 50;
-    public static Square prevSq = null;
     private static final Border b = BorderFactory.createLineBorder(Color.ORANGE, 2);
 
     Square() {
@@ -21,40 +19,77 @@ public class Square extends JPanel {
     Square(int x, int y) {
         addMouseListener(new MouseAdapter() {
             public void mousePressed(MouseEvent me) {
-                Square nextSquare = (Square) me.getComponent();
+                Board.backupPrevSq = (Square)Board.cloneSwingComponent(Board.prevSq);
+                Board.backupNextSq = (Square)Board.cloneSwingComponent((Square) me.getComponent());
 
-                if (prevSq == nextSquare) {
+                Square nextSquare = (Square) me.getComponent();
+                if (Board.prevSq == nextSquare) {
                     if (nextSquare.getBorder() == null)
                         nextSquare.setBorder(b);
                     else nextSquare.removeBorder();
-                    prevSq = new Square(10, 10);
+                    Board.prevSq = new Square(10, 10);
                     return;
                 } else {
                     nextSquare.setBorder(b);
-                    prevSq.removeBorder();
+                    Board.prevSq.removeBorder();
                 }
 
-                if (prevSq.getCurrentPiece() == null) {
-                    prevSq = nextSquare;
+                if (Board.prevSq.getCurrentPiece() == null) {
+                    Board.prevSq = nextSquare;
                     return;
                 }
 
-                int initialX = prevSq.getXCord();
-                int initialY = prevSq.getYCord();
+                int initialX = Board.prevSq.getXCord();
+                int initialY = Board.prevSq.getYCord();
 
                 int destX = nextSquare.getXCord();
                 int destY = nextSquare.getYCord();
 
                 Move mv = new Move(initialX, initialY, destX, destY);
-                boolean validMove = prevSq.getCurrentPiece().isValidMove(mv);
-                boolean dangerOnKing = Board.getKing("white").kingInDanger();
-                if ((validMove && !dangerOnKing) || (validMove && mv.getP() instanceof King)) {
-                    nextSquare.removeCurrentPiece(mv.getCapturedP() != null);
-                    nextSquare.setCurrentPiece(prevSq.getCurrentPiece());
-                    prevSq.removeCurrentPiece(false);
+                boolean validMove;
+                if (mv.getP().getColor().equals(ChessGame.turnColor)) {
+                    validMove = mv.getP().isValidMove(mv);
+                } else {
+                    validMove = false;
                 }
 
-                prevSq = nextSquare;
+                boolean dangerOnKing = Board.getKing(ChessGame.turnColor).kingInDanger();
+
+                if (validMove && dangerOnKing) {
+                    System.out.println(Board.backupPrevSq);
+                }
+
+                if ((validMove /*&& !dangeronking*/) || (validMove && mv.getP() instanceof King)) {
+                    nextSquare.removeCurrentPiece(mv.getCapturedP() != null);
+                    nextSquare.setCurrentPiece(Board.prevSq.getCurrentPiece());
+                    Board.prevSq.removeCurrentPiece(false);
+                    if (ChessGame.turnColor.equals("white"))
+                        ChessGame.turnColor = "black";
+                    else
+                        ChessGame.turnColor = "white";
+
+                    if (dangerOnKing) {
+                        String prevCol = ChessGame.turnColor.equals("white") ? "black" : "white";
+                        if(Board.getKing(prevCol).kingInDanger()) {
+                            ChessGame.turnColor = prevCol;
+                            nextSquare.removeCurrentPiece(false);
+                            nextSquare.setCurrentPiece(Board.backupNextSq.getCurrentPiece());
+                            nextSquare.setXCord(Board.backupNextSq.getXCord());
+                            nextSquare.setYCord(Board.backupNextSq.getYCord());
+
+                            nextSquare.removeBorder();
+                            Board.prevSq.removeBorder();
+
+                            Board.prevSq.removeCurrentPiece(false);
+                            Board.prevSq.setCurrentPiece(Board.backupPrevSq.getCurrentPiece());
+                            Board.prevSq.setXCord(Board.backupPrevSq.getXCord());
+                            Board.prevSq.setYCord(Board.backupPrevSq.getYCord());
+                            return;
+                        }
+                    }
+                }
+
+                Board.prevSq = nextSquare;
             }
         });
 
@@ -77,11 +112,15 @@ public class Square extends JPanel {
     int getXCord() { return xCord; }
     int getYCord() { return yCord; }
 
+    void setXCord(int x) { xCord = x; }
+    void setYCord(int y) { yCord = y; }
+
     public Piece getCurrentPiece() {
         return currentPiece;
     }
 
     public void setCurrentPiece(Piece currentPiece) {
+        if (currentPiece == null) return;
         this.currentPiece = currentPiece;
         this.currentPiece.setCurrSquare(this);
         super.add(currentPiece);
@@ -90,7 +129,6 @@ public class Square extends JPanel {
         if (this.currentPiece != null) {
             super.removeAll();
             if (kill) Board.pieces.remove(currentPiece);
-            // this.currentPiece.setCurrSquare(null);
             this.currentPiece = null;
         }
     }

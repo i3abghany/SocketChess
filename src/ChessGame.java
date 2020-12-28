@@ -10,4 +10,5 @@ public class ChessGame {
     public ChessGame() throws IOException {
         b = new Board();
     }
+
 }

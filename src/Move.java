@@ -3,7 +3,6 @@ public class Move {
     private Piece capturedP;
     private int initialX, initialY;
     private int destX, destY;
-    private boolean valid;
 
     public Move(int px, int py, int dx, int dy) {
         this.p = Board.getPieceAtIndex(px, py);
@@ -67,5 +66,4 @@ public class Move {
     public boolean isCrossing() {
         return initialX == destX || initialY == destY;
     }
-
 }
