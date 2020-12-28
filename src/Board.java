@@ -113,14 +113,6 @@ public class Board extends JFrame {
         return null;
     }
 
-    static public Piece getPieceAtIndex(int i, int j) {
-        return squares[j][i].getCurrentPiece();
-    }
-
-    public boolean isStalemate() {
-        return false;
-    }
-
     public static JComponent cloneSwingComponent(JComponent c) {
         try {
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -133,5 +125,13 @@ public class Board extends JFrame {
             ex.printStackTrace();
             return null;
         }
+    }
+
+    static public Piece getPieceAtIndex(int i, int j) {
+        return squares[j][i].getCurrentPiece();
+    }
+
+    public boolean isStalemate() {
+        return false;
     }
 }

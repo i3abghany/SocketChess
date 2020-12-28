@@ -59,7 +59,7 @@ public class Square extends JPanel {
                     System.out.println(Board.backupPrevSq);
                 }
 
-                if ((validMove /*&& !dangeronking*/) || (validMove && mv.getP() instanceof King)) {
+                if (validMove) {
                     nextSquare.removeCurrentPiece(mv.getCapturedP() != null);
                     nextSquare.setCurrentPiece(Board.prevSq.getCurrentPiece());
                     Board.prevSq.removeCurrentPiece(false);

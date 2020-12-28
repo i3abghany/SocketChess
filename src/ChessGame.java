@@ -3,7 +3,7 @@ import java.io.IOException;
 public class ChessGame {
     private Board b;
     public static String turnColor = "white";
-    private boolean isStalemate() {
+    public boolean isStalemate() {
         return b.isStalemate();
     }
 
