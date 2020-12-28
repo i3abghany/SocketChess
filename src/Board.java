@@ -2,8 +2,6 @@ import org.imgscalr.Scalr;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
-import javax.xml.stream.Location;
-import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -14,15 +12,13 @@ import java.util.ArrayList;
 
 public class Board extends JFrame {
     static private final int DIM = 8;
-    static private final int DIM_N = 8;
-    static private final int DIM_M = 8;
     static private final int WIDTH_MARGIN = 15;
     static private final int HEIGHT_MARGIN = 38;
     static private Square[][] squares;
     static private ArrayList<Piece> pieces;
 
     public Board() throws IOException {
-        squares = new Square[DIM_N][DIM_M];
+        squares = new Square[DIM][DIM];
         initSquares();
         initPieces();
         super.setSize(DIM * Square.SQUARE_WIDTH + WIDTH_MARGIN, DIM * Square.SQUARE_WIDTH + HEIGHT_MARGIN);
@@ -35,8 +31,8 @@ public class Board extends JFrame {
     }
 
     private void initSquares() {
-        for (int i = 0; i < DIM_M; i++) {
-            for (int j = 0; j < DIM_N; j++) {
+        for (int i = 0; i < DIM; i++) {
+            for (int j = 0; j < DIM; j++) {
                 squares[j][i] = new Square(i, j); // reversed j and i !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                 super.add(squares[j][i]);
             }
@@ -114,6 +110,6 @@ public class Board extends JFrame {
     }
 
     public static void main(String[] args) throws IOException {
-        Board b = new Board();
+        new Board();
     }
 }
