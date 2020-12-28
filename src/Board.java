@@ -2,6 +2,7 @@ import org.imgscalr.Scalr;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.xml.stream.Location;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -26,6 +27,8 @@ public class Board extends JFrame {
         initPieces();
         super.setSize(DIM * Square.SQUARE_WIDTH + WIDTH_MARGIN, DIM * Square.SQUARE_WIDTH + HEIGHT_MARGIN);
         super.add(new JPanel());
+        Square.prevSq = new Square(10, 10);
+
         super.setVisible(true);
         super.setResizable(false);
         super.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -42,21 +45,12 @@ public class Board extends JFrame {
 
     private void initPieces() throws IOException {
         pieces = new ArrayList<>();
-//        testInit();
         initPawnRows();
         initBishops();
         initKnights();
         initQueens();
         initKings();
         initRooks();
-    }
-
-    private void testInit() throws IOException {
-        for (int i = 0; i < DIM_N; i++) {
-            for (int j = 0; j < DIM_M; j++) {
-                initPieceCell("rook", squares[i][j], "white");
-            }
-        }
     }
 
     private void initRooks() throws IOException {
@@ -116,12 +110,10 @@ public class Board extends JFrame {
     }
 
     static public Piece getPieceAtIndex(int i, int j) {
-        return squares[i][j].getCurrentPiece();
+        return squares[j][i].getCurrentPiece();
     }
 
     public static void main(String[] args) throws IOException {
         Board b = new Board();
-        System.out.println(Board.getPieceAtIndex(7, 7).name);
-
     }
 }

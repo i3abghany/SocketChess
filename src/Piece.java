@@ -10,16 +10,9 @@ public abstract class Piece extends JPanel {
     protected String ImageFileName;
 
     protected Piece(String col, Square sq) {
-        // for testing purposes.
-        addMouseListener(new MouseAdapter() {
-            public void mousePressed(MouseEvent me) {
-                System.out.println("Name: " + name + "\n" + "X, Y: " + currSquare.getXCord() + ", " + currSquare.getYCord());
-            }
-        });
         this.currSquare = sq;
         this.color = col;
     }
-
 
     public abstract boolean isValidMove(Move m);
 
