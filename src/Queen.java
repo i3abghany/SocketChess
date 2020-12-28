@@ -7,6 +7,19 @@ public class Queen extends Piece{
 
     @Override
     public boolean isValidMove(Move move) {
+        int initialX = move.getInitialX();
+        int initialY = move.getInitialY();
+
+        int destX = move.getDestX();
+        int destY = move.getDestY();
+
+
+        if (move.isDiagonal() && Bishop.validateDiagonals(initialX, initialY, destX, destY))
+            return false;
+
+        if (move.isCrossing() && Rook.validateCrossings(initialX, initialY, destX, destY))
+            return false;
+
         if ((move.getCapturedP() == null)
                 || (move.getCapturedP() != null
                 && !move.getP().getColor().equals(move.getCapturedP().getColor()))) {

@@ -60,4 +60,12 @@ public class Move {
     public void setP(Piece p) {
         this.p = p;
     }
+
+    public boolean isDiagonal() {
+        return initialX + initialY == destX + destY;
+    }
+
+    public boolean isCrossing() {
+        return initialX == destX || initialY == destY;
+    }
 }

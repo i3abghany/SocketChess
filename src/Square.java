@@ -20,6 +20,13 @@ public class Square extends JPanel {
 
     Square(int x, int y) {
         addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                Square sq = (Square) e.getComponent();
+                System.out.println(sq.getXCord() + ", " + sq.getYCord());
+            }
+        });
+        addMouseListener(new MouseAdapter() {
             public void mousePressed(MouseEvent me) {
                 Square nextSquare = (Square) me.getComponent();
 
