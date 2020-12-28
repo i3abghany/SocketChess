@@ -47,10 +47,11 @@ public class Square extends JPanel {
 
                 Move mv = new Move(initialX, initialY, destX, destY);
                 boolean validMove = prevSq.getCurrentPiece().isValidMove(mv);
-                if (validMove) {
-                    nextSquare.removeAll();
+                boolean dangerOnKing = Board.getKing("white").kingInDanger();
+                if ((validMove && !dangerOnKing) || (validMove && mv.getP() instanceof King)) {
+                    nextSquare.removeCurrentPiece(mv.getCapturedP() != null);
                     nextSquare.setCurrentPiece(prevSq.getCurrentPiece());
-                    prevSq.removeCurrentPiece();
+                    prevSq.removeCurrentPiece(false);
                 }
 
                 prevSq = nextSquare;
@@ -82,11 +83,14 @@ public class Square extends JPanel {
 
     public void setCurrentPiece(Piece currentPiece) {
         this.currentPiece = currentPiece;
+        this.currentPiece.setCurrSquare(this);
         super.add(currentPiece);
     }
-    public void removeCurrentPiece() {
+    public void removeCurrentPiece(boolean kill) {
         if (this.currentPiece != null) {
-            super.remove(this.currentPiece);
+            super.removeAll();
+            if (kill) Board.pieces.remove(currentPiece);
+            // this.currentPiece.setCurrSquare(null);
             this.currentPiece = null;
         }
     }

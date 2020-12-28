@@ -4,6 +4,7 @@ public class Move {
     private int initialX, initialY;
     private int destX, destY;
     private boolean valid;
+
     public Move(int px, int py, int dx, int dy) {
         this.p = Board.getPieceAtIndex(px, py);
         this.capturedP = Board.getPieceAtIndex(dx, dy);
@@ -21,9 +22,7 @@ public class Move {
         this.destY = destY;
     }
 
-    public int getDestX() {
-        return destX;
-    }
+    public int getDestX() { return destX; }
 
     public void setDestX(int destX) {
         this.destX = destX;
@@ -68,4 +67,5 @@ public class Move {
     public boolean isCrossing() {
         return initialX == destX || initialY == destY;
     }
+
 }

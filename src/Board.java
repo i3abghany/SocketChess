@@ -15,7 +15,7 @@ public class Board extends JFrame {
     static private final int WIDTH_MARGIN = 15;
     static private final int HEIGHT_MARGIN = 38;
     static private Square[][] squares;
-    static private ArrayList<Piece> pieces;
+    static public ArrayList<Piece> pieces;
 
     public Board() throws IOException {
         squares = new Square[DIM][DIM];
@@ -104,11 +104,23 @@ public class Board extends JFrame {
         }
     }
 
+    public static King getKing(String col) {
+        for (Piece p : pieces) {
+            if (p instanceof King && p.color.equals(col))
+                return (King) p;
+        }
+        return null;
+    }
+
     static public Piece getPieceAtIndex(int i, int j) {
         return squares[j][i].getCurrentPiece();
     }
 
     public static void main(String[] args) throws IOException {
         new Board();
+    }
+
+    public boolean isStalemate() {
+        return false;
     }
 }
