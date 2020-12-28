@@ -88,7 +88,6 @@ public class Board extends JFrame {
         p.setCurrSquare(sq);
         pieces.add(p);
         sq.setCurrentPiece(p);
-        sq.add(p);
         sq.getCurrentPiece().setOpaque(false);
         BufferedImage img = ImageIO.read(new File(p.getImageFileName()));
         img = Scalr.resize(img, 40);
