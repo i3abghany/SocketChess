@@ -38,6 +38,12 @@ public class Board extends JFrame {
         }
     }
 
+    public void refreshFrame() {
+        super.invalidate();
+        super.revalidate();
+        super.repaint();
+    }
+
     private void initPieces() throws IOException {
         pieces = new ArrayList<>();
         initPawnRows();
@@ -125,7 +131,7 @@ public class Board extends JFrame {
         }
     }
 
-    public void executeMove(Move mv) {
+    public boolean executeMove(Move mv) {
         Square initSquare = squares[mv.getInitialY()][mv.getInitialX()];
         Square nextSquare = squares[mv.getDestY()][mv.getDestX()];
 
@@ -140,7 +146,9 @@ public class Board extends JFrame {
             nextSquare.removeCurrentPiece(mv.getCapturedP() != null);
             nextSquare.setCurrentPiece(initSquare.getCurrentPiece());
             initSquare.removeCurrentPiece(false);
+            return true;
         }
+        return false;
     }
 
     static public Piece getPieceAtIndex(int i, int j) {

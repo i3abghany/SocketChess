@@ -3,6 +3,7 @@ import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.IOException;
 
 public class Square extends JPanel {
     private int xCord, yCord;
@@ -55,10 +56,6 @@ public class Square extends JPanel {
 
                 boolean dangerOnKing = Board.getKing(ChessGame.turnColor).kingInDanger();
 
-                if (validMove && dangerOnKing) {
-                    System.out.println(Board.backupPrevSq);
-                }
-
                 if (validMove) {
                     nextSquare.removeCurrentPiece(mv.getCapturedP() != null);
                     nextSquare.setCurrentPiece(Board.prevSq.getCurrentPiece());
@@ -86,6 +83,12 @@ public class Square extends JPanel {
                             Board.prevSq.setYCord(Board.backupPrevSq.getYCord());
                             return;
                         }
+                    }
+
+                    try {
+                        Client.moveDone(mv);
+                    } catch (IOException e) {
+                        e.printStackTrace();
                     }
                 }
 
