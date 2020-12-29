@@ -2,7 +2,6 @@ import org.imgscalr.Scalr;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
-import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.util.ArrayList;
@@ -12,7 +11,6 @@ public class Board extends JFrame {
     static private final int WIDTH_MARGIN = 15;
     static private final int HEIGHT_MARGIN = 38;
     static private Square[][] squares;
-    static private Square[][] backupSquares;
     static public ArrayList<Piece> pieces;
     public static Square prevSq = null;
     public static Square backupPrevSq = null;
@@ -121,9 +119,27 @@ public class Board extends JFrame {
             ByteArrayInputStream bais = new ByteArrayInputStream(baos.toByteArray());
             ObjectInputStream ois = new ObjectInputStream(bais);
             return (JComponent) ois.readObject();
-        } catch (IOException|ClassNotFoundException ex) {
+        } catch (IOException | ClassNotFoundException ex) {
             ex.printStackTrace();
             return null;
+        }
+    }
+
+    public void executeMove(Move mv) {
+        Square initSquare = squares[mv.getInitialY()][mv.getInitialX()];
+        Square nextSquare = squares[mv.getDestY()][mv.getDestX()];
+
+        boolean validMove;
+        if (mv.getP().getColor().equals(ChessGame.turnColor)) {
+            validMove = mv.getP().isValidMove(mv);
+        } else {
+            validMove = false;
+        }
+
+        if (validMove) {
+            nextSquare.removeCurrentPiece(mv.getCapturedP() != null);
+            nextSquare.setCurrentPiece(initSquare.getCurrentPiece());
+            initSquare.removeCurrentPiece(false);
         }
     }
 

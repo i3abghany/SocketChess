@@ -1,4 +1,3 @@
-import javax.swing.*;
 import java.io.*;
 
 public class Move implements Serializable {
@@ -8,10 +7,8 @@ public class Move implements Serializable {
     private int destX, destY;
 
     public Move(int px, int py, int dx, int dy) {
-//        this.p = Board.getPieceAtIndex(px, py);
-//        this.capturedP = Board.getPieceAtIndex(dx, dy);
-        this.p = new King("white", new Square(1, 5));
-        this.capturedP = new Queen("black", new Square(4, 13));
+        this.p = Board.getPieceAtIndex(px, py);
+        this.capturedP = Board.getPieceAtIndex(dx, dy);
         this.initialX = px;
         this.initialY = py;
         this.destX = dx;
