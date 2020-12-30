@@ -24,21 +24,7 @@ public class Square extends JPanel {
                 Board.backupNextSq = (Square)Board.cloneSwingComponent((Square) me.getComponent());
 
                 Square nextSquare = (Square) me.getComponent();
-                if (Board.prevSq == nextSquare) {
-                    if (nextSquare.getBorder() == null)
-                        nextSquare.setBorder(b);
-                    else nextSquare.removeBorder();
-                    Board.prevSq = new Square(10, 10);
-                    return;
-                } else {
-                    nextSquare.setBorder(b);
-                    Board.prevSq.removeBorder();
-                }
-
-                if (Board.prevSq.getCurrentPiece() == null) {
-                    Board.prevSq = nextSquare;
-                    return;
-                }
+                if (isRedundantMove(nextSquare)) return;
 
                 int initialX = Board.prevSq.getXCord();
                 int initialY = Board.prevSq.getYCord();
@@ -47,16 +33,7 @@ public class Square extends JPanel {
                 int destY = nextSquare.getYCord();
 
                 Move mv = new Move(initialX, initialY, destX, destY);
-                boolean validMove;
-                if (mv.getP().getColor().equals(ChessGame.turnColor) && mv.getP().getColor().equals(Board.playerColor)) {
-                    if (ChessGame.winner == 'w' || ChessGame.winner == 'b') {
-                        validMove = false;
-                    } else {
-                        validMove = mv.getP().isValidMove(mv);
-                    }
-                } else {
-                    validMove = false;
-                }
+                boolean validMove = isValidMove(mv);
 
                 boolean dangerOnKing = Board.getKing(ChessGame.turnColor).kingInDanger();
 
@@ -72,36 +49,11 @@ public class Square extends JPanel {
                     if (dangerOnKing) {
                         String prevCol = ChessGame.turnColor.equals("white") ? "black" : "white";
                         if(Board.getKing(prevCol).kingInDanger()) {
-                            ChessGame.turnColor = prevCol;
-                            nextSquare.removeCurrentPiece(false);
-                            nextSquare.setCurrentPiece(Board.backupNextSq.getCurrentPiece());
-                            nextSquare.setXCord(Board.backupNextSq.getXCord());
-                            nextSquare.setYCord(Board.backupNextSq.getYCord());
-
-                            nextSquare.removeBorder();
-                            Board.prevSq.removeBorder();
-
-
-                            Board.prevSq.removeCurrentPiece(false);
-                            Board.prevSq.setCurrentPiece(Board.backupPrevSq.getCurrentPiece());
-                            Board.prevSq.setXCord(Board.backupPrevSq.getXCord());
-                            Board.prevSq.setYCord(Board.backupPrevSq.getYCord());
+                            resetGame(nextSquare, prevCol);
                             return;
                         }
                     }
-
-                    try {
-                        Client.moveDone(mv);
-                        Board.whoseTurn.setText(ChessGame.turnColor + "'s Turn!");
-                        char isFinished = ChessGame.isGameFinished();
-                        if (isFinished == 'w' || isFinished == 'b') {
-                            ChessGame.displayWinner();
-                        } else if (isFinished == 's'){
-                            ChessGame.displayStalemate();
-                        }
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+                    checkGameFinishedAfterMove(mv);
                 }
 
                 Board.prevSq = nextSquare;
@@ -115,6 +67,71 @@ public class Square extends JPanel {
         }
         super.setLocation(x * SQUARE_WIDTH, y * SQUARE_WIDTH);
         super.setSize(SQUARE_WIDTH, SQUARE_WIDTH);
+    }
+
+    private boolean isRedundantMove(Square nextSquare) {
+        if (Board.prevSq == nextSquare) {
+            if (nextSquare.getBorder() == null)
+                nextSquare.setBorder(b);
+            else nextSquare.removeBorder();
+            Board.prevSq = new Square(10, 10);
+            return true;
+        } else {
+            nextSquare.setBorder(b);
+            Board.prevSq.removeBorder();
+        }
+
+        if (Board.prevSq.getCurrentPiece() == null) {
+            Board.prevSq = nextSquare;
+            return true;
+        }
+        return false;
+    }
+
+    private void checkGameFinishedAfterMove(Move mv) {
+        try {
+            Client.moveDone(mv);
+            Board.whoseTurn.setText(ChessGame.turnColor + "'s Turn!");
+            char isFinished = ChessGame.isGameFinished();
+            if (isFinished == 'w' || isFinished == 'b') {
+                ChessGame.displayWinner();
+            } else if (isFinished == 's'){
+                ChessGame.displayStalemate();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private boolean isValidMove(Move mv) {
+        boolean validMove;
+        if (mv.getP().getColor().equals(ChessGame.turnColor) && mv.getP().getColor().equals(Board.playerColor)) {
+            if (ChessGame.winner == 'w' || ChessGame.winner == 'b') {
+                validMove = false;
+            } else {
+                validMove = mv.getP().isValidMove(mv);
+            }
+        } else {
+            validMove = false;
+        }
+        return validMove;
+    }
+
+    private void resetGame(Square nextSquare, String prevCol) {
+        ChessGame.turnColor = prevCol;
+        nextSquare.removeCurrentPiece(false);
+        nextSquare.setCurrentPiece(Board.backupNextSq.getCurrentPiece());
+        nextSquare.setXCord(Board.backupNextSq.getXCord());
+        nextSquare.setYCord(Board.backupNextSq.getYCord());
+
+        nextSquare.removeBorder();
+        Board.prevSq.removeBorder();
+
+
+        Board.prevSq.removeCurrentPiece(false);
+        Board.prevSq.setCurrentPiece(Board.backupPrevSq.getCurrentPiece());
+        Board.prevSq.setXCord(Board.backupPrevSq.getXCord());
+        Board.prevSq.setYCord(Board.backupPrevSq.getYCord());
     }
 
     public Square(int i, int j, int w, int h) {
