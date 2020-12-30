@@ -48,7 +48,11 @@ public class Client {
         }).start();
 
         while (ch.isGameFinished() == 'n');
-        ch.displayWinner();
+        if (ChessGame.winner == 'w' || ChessGame.winner == 'b') {
+            ch.displayWinner();
+        } else {
+            ch.displayStalemate();
+        }
 
     }
 }

@@ -41,4 +41,9 @@ public class ChessGame {
         JLabel jl = new JLabel("Game has finished! the winner is the " + (winner == 'w' ? "white" : "black") + "!");
         JOptionPane.showMessageDialog(b, jl, "Winner!", JOptionPane.INFORMATION_MESSAGE);
     }
+
+    public void displayStalemate() {
+        JLabel jl = new JLabel("Game has finished! It was a stalemate.");
+        JOptionPane.showMessageDialog(b, jl, "Stalemate!", JOptionPane.INFORMATION_MESSAGE);
+    }
 }

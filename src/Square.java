@@ -49,7 +49,7 @@ public class Square extends JPanel {
                 Move mv = new Move(initialX, initialY, destX, destY);
                 boolean validMove;
                 if (mv.getP().getColor().equals(ChessGame.turnColor) && mv.getP().getColor().equals(Board.playerColor)) {
-                    if (ChessGame.winner != 'n') {
+                    if (ChessGame.winner == 'w' || ChessGame.winner == 'b') {
                         validMove = false;
                     } else {
                         validMove = mv.getP().isValidMove(mv);
@@ -80,6 +80,7 @@ public class Square extends JPanel {
 
                             nextSquare.removeBorder();
                             Board.prevSq.removeBorder();
+
 
                             Board.prevSq.removeCurrentPiece(false);
                             Board.prevSq.setCurrentPiece(Board.backupPrevSq.getCurrentPiece());

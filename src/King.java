@@ -33,6 +33,9 @@ public class King extends Piece {
             }
             Move mv = new Move(p.getCurrSquare().getXCord(), p.getCurrSquare().getYCord(), dX, dY);
             if (p.isValidMove(mv)) {
+                if (p instanceof Pawn) {
+                    return p.getCurrSquare().getXCord() != dY;
+                }
                 return true;
             }
         }
@@ -49,7 +52,7 @@ public class King extends Piece {
 
         int initialX = this.getCurrSquare().getXCord();
         int initialY = this.getCurrSquare().getYCord();
-
+        boolean allInvalidMoves = true;
         boolean isKingTrapped = true;
         for (int i = 0; i < dx.length; i++) {
             for (int j = 0; j < dx.length; j++) {
@@ -61,11 +64,11 @@ public class King extends Piece {
 
                 if (!this.isValidMove(new Move(initialX, initialY, nextX, nextY)))
                     continue;
-
+                allInvalidMoves = false;
                 isKingTrapped &= this.canKingBeKilledAt(nextX, nextY);
             }
         }
-        return isKingTrapped;
+        return isKingTrapped && !allInvalidMoves;
     }
     public boolean canKingBeSaved(Board b) {
         ArrayList<Piece> allyPieces = Board.pieces

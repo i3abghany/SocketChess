@@ -174,13 +174,19 @@ public class Board extends JFrame {
     }
 
     public boolean isStalemate() {
-        return (Board.getKing("white").isKingTrapped() && !Board.getKing("white").kingInDanger())
+        boolean stalemate = (Board.getKing("white").isKingTrapped() && !Board.getKing("white").kingInDanger())
                 || (Board.getKing("black").isKingTrapped() && !Board.getKing("black").kingInDanger());
+        if (stalemate) ChessGame.winner = 's';
+        return stalemate;
     }
 
     public char isGameFinished() {
         King whiteKing = Board.getKing("white");
         King blackKing = Board.getKing("black");
+
+        if (isStalemate()) {
+            return ChessGame.winner;
+        }
 
         if (!whiteKing.kingInDanger() && !blackKing.kingInDanger())
             return ChessGame.winner; // must be 'n'.
@@ -205,8 +211,5 @@ public class Board extends JFrame {
         }
         return ChessGame.winner;
     }
-
-
-
 }
 
