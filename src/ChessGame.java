@@ -1,5 +1,6 @@
 import javax.swing.*;
 import java.io.IOException;
+import java.util.Locale;
 
 public class ChessGame {
     private static Board b;
@@ -16,6 +17,7 @@ public class ChessGame {
                 ChessGame.displayStalemate();
             }
             turnColor = turnColor.equals("white") ? "black" : "white";
+            b.whoseTurn.setText(turnColor + "'s Turn!");
             b.refreshFrame();
         }
     }
@@ -39,7 +41,7 @@ public class ChessGame {
 
     public ChessGame(String col) throws IOException {
         myColor = col;
-        b = new Board();
+        b = new Board(col);
         Board.playerColor = myColor;
     }
 

@@ -2,13 +2,14 @@ import org.imgscalr.Scalr;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 
 public class Board extends JFrame {
-    static private final int WIDTH_MARGIN = 15;
+    static private final int WIDTH_MARGIN = 300;
     static private final int HEIGHT_MARGIN = 38;
     static private Square[][] squares;
     static public ArrayList<Piece> pieces;
@@ -17,18 +18,19 @@ public class Board extends JFrame {
     public static Square backupPrevSq = null;
     public static Square backupNextSq = null;
     public static String playerColor;
+    public static JLabel whoseTurn;
 
-    public Board() throws IOException {
+    public Board(String col) throws IOException {
         squares = new Square[DIM][DIM];
         initSquares();
         initPieces();
         super.setSize(DIM * Square.SQUARE_WIDTH + WIDTH_MARGIN, DIM * Square.SQUARE_WIDTH + HEIGHT_MARGIN);
         super.add(new JPanel());
         prevSq = new Square(10, 10);
-
-        super.setVisible(true);
         super.setResizable(false);
         super.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        super.setTitle("Chess. " + col + "'s Window.");
+        super.setVisible(true);
     }
 
     private void initSquares() {
@@ -38,6 +40,11 @@ public class Board extends JFrame {
                 super.add(squares[j][i]);
             }
         }
+        whoseTurn = new JLabel(ChessGame.turnColor + "'s Turn!");
+        whoseTurn.setFont(new Font(null, Font.BOLD, 26));
+        Square sq = new Square(9, 3, 200, 100);
+        sq.add(whoseTurn);
+        super.add(sq);
     }
 
     public void refreshFrame() {

@@ -92,6 +92,7 @@ public class Square extends JPanel {
 
                     try {
                         Client.moveDone(mv);
+                        Board.whoseTurn.setText(ChessGame.turnColor + "'s Turn!");
                         char isFinished = ChessGame.isGameFinished();
                         if (isFinished == 'w' || isFinished == 'b') {
                             ChessGame.displayWinner();
@@ -109,14 +110,18 @@ public class Square extends JPanel {
 
         xCord = x;
         yCord = y;
-        if ((xCord % 2 != 0 && yCord % 2 == 0) || (xCord % 2 == 0 && yCord % 2 != 0)) {
-            super.setOpaque(true);
-        } else {
+        if ((xCord + yCord) % 2 == 0) {
             super.setBackground(Color.WHITE);
-            super.setOpaque(true);
         }
-        setLocation(x * SQUARE_WIDTH, y * SQUARE_WIDTH);
+        super.setLocation(x * SQUARE_WIDTH, y * SQUARE_WIDTH);
         super.setSize(SQUARE_WIDTH, SQUARE_WIDTH);
+    }
+
+    public Square(int i, int j, int w, int h) {
+        this.xCord = i;
+        this.yCord = j;
+        super.setLocation(i * SQUARE_WIDTH, j * SQUARE_WIDTH);
+        super.setSize(w, h);
     }
 
     public void removeBorder() {
