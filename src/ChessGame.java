@@ -2,19 +2,25 @@ import javax.swing.*;
 import java.io.IOException;
 
 public class ChessGame {
-    private final Board b;
+    private static Board b;
     public static String myColor;
     public static String turnColor = "white";
     public static char winner = 'n';
 
     public void executeMove(Move mv) {
         if (b.executeMove(mv)) {
+            char isFinished = isGameFinished();
+            if (isFinished == 'w' || isFinished == 'b') {
+                ChessGame.displayWinner();
+            } else if (isFinished == 's'){
+                ChessGame.displayStalemate();
+            }
             turnColor = turnColor.equals("white") ? "black" : "white";
             b.refreshFrame();
         }
     }
 
-    public char isGameFinished() {
+    public static char isGameFinished() {
         return b.isGameFinished();
     }
 
@@ -37,13 +43,13 @@ public class ChessGame {
         Board.playerColor = myColor;
     }
 
-    public void displayWinner() {
+    public static void displayWinner() {
         JLabel jl = new JLabel("Game has finished! the winner is the " + (winner == 'w' ? "white" : "black") + "!");
-        JOptionPane.showMessageDialog(b, jl, "Winner!", JOptionPane.INFORMATION_MESSAGE);
+        JOptionPane.showMessageDialog(ChessGame.b, jl, "Winner!", JOptionPane.INFORMATION_MESSAGE);
     }
 
-    public void displayStalemate() {
+    public static void displayStalemate() {
         JLabel jl = new JLabel("Game has finished! It was a stalemate.");
-        JOptionPane.showMessageDialog(b, jl, "Stalemate!", JOptionPane.INFORMATION_MESSAGE);
+        JOptionPane.showMessageDialog(ChessGame.b, jl, "Stalemate!", JOptionPane.INFORMATION_MESSAGE);
     }
 }

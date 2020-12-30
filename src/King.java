@@ -10,8 +10,9 @@ public class King extends Piece {
 
     @Override
     public boolean isValidMove(Move move) {
-        if (canKingBeKilledAt(move.getDestX(), move.getDestY()))
+        if (canKingBeKilledAt(move.getDestX(), move.getDestY())) {
             return false;
+        }
 
         if ((move.getCapturedP() == null)
                 || (move.getCapturedP() != null
@@ -52,23 +53,20 @@ public class King extends Piece {
 
         int initialX = this.getCurrSquare().getXCord();
         int initialY = this.getCurrSquare().getYCord();
-        boolean allInvalidMoves = true;
         boolean isKingTrapped = true;
         for (int i = 0; i < dx.length; i++) {
-            for (int j = 0; j < dx.length; j++) {
-                int nextX = initialX + dx[i];
-                int nextY = initialY + dy[j];
+            int nextX = initialX + dx[i];
+            int nextY = initialY + dy[i];
 
-                if (nextX < 0 || nextX >= 8 || nextY < 0 || nextY >= 8)
-                    continue;
+            if (nextX < 0 || nextX >= 8 || nextY < 0 || nextY >= 8)
+                continue;
 
-                if (!this.isValidMove(new Move(initialX, initialY, nextX, nextY)))
-                    continue;
-                allInvalidMoves = false;
-                isKingTrapped &= this.canKingBeKilledAt(nextX, nextY);
-            }
+            if (!this.isValidMove(new Move(initialX, initialY, nextX, nextY)))
+                continue;
+
+            isKingTrapped &= this.canKingBeKilledAt(nextX, nextY);
         }
-        return isKingTrapped && !allInvalidMoves;
+        return isKingTrapped;
     }
     public boolean canKingBeSaved(Board b) {
         ArrayList<Piece> allyPieces = Board.pieces

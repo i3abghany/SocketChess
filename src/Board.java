@@ -5,6 +5,7 @@ import javax.swing.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 public class Board extends JFrame {
     static private final int WIDTH_MARGIN = 15;
@@ -174,10 +175,29 @@ public class Board extends JFrame {
     }
 
     public boolean isStalemate() {
-        boolean stalemate = (Board.getKing("white").isKingTrapped() && !Board.getKing("white").kingInDanger())
-                || (Board.getKing("black").isKingTrapped() && !Board.getKing("black").kingInDanger());
+        boolean whiteStalled = (Board.getKing("white").isKingTrapped() && !Board.getKing("white").kingInDanger());
+        boolean blackStalled = (Board.getKing("black").isKingTrapped() && !Board.getKing("black").kingInDanger());
+
+        boolean canWhiteMove = canTeamMove("white");
+        boolean canBlackMove = canTeamMove("black");
+
+        boolean stalemate = (whiteStalled && !canWhiteMove) || (blackStalled && !canBlackMove);
+
         if (stalemate) ChessGame.winner = 's';
         return stalemate;
+    }
+
+    public boolean canTeamMove(String col) {
+        ArrayList<Piece> pieces = Board.pieces
+                .stream()
+                .filter(p -> p.getColor().equals(col))
+                .collect(Collectors.toCollection(ArrayList::new));
+        boolean feasibleMoves = false;
+        for (Piece p : pieces) {
+            if (p instanceof King) continue;
+            feasibleMoves |= p.canMove();
+        }
+        return feasibleMoves;
     }
 
     public char isGameFinished() {
@@ -188,8 +208,9 @@ public class Board extends JFrame {
             return ChessGame.winner;
         }
 
-        if (!whiteKing.kingInDanger() && !blackKing.kingInDanger())
+        if (!whiteKing.kingInDanger() && !blackKing.kingInDanger()) {
             return ChessGame.winner; // must be 'n'.
+        }
 
         boolean whiteKingCantMove = whiteKing.isKingTrapped() && whiteKing.kingInDanger();
         boolean canWhiteKingBeSaved = false;

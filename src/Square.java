@@ -92,6 +92,12 @@ public class Square extends JPanel {
 
                     try {
                         Client.moveDone(mv);
+                        char isFinished = ChessGame.isGameFinished();
+                        if (isFinished == 'w' || isFinished == 'b') {
+                            ChessGame.displayWinner();
+                        } else if (isFinished == 's'){
+                            ChessGame.displayStalemate();
+                        }
                     } catch (IOException e) {
                         e.printStackTrace();
                     }

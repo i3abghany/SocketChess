@@ -50,7 +50,11 @@ public class Server {
                     oos1.flush();
                 } catch (IOException | ClassNotFoundException e) {
                     run1.set(false);
-                    e.printStackTrace();
+                    try {
+                        client1.close();
+                    } catch (IOException ioException) {
+                        ioException.printStackTrace();
+                    }
                 }
             }
         });
@@ -63,6 +67,11 @@ public class Server {
                     oos2.writeObject(client1Move);
                 } catch (IOException | ClassNotFoundException e) {
                     run2.set(false);
+                    try {
+                        client2.close();
+                    } catch (IOException ioException) {
+                        ioException.printStackTrace();
+                    }
                 }
             }
         });
@@ -71,7 +80,7 @@ public class Server {
         th2.start();
     }
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, InterruptedException {
         new Server();
     }
 }

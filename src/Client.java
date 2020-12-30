@@ -38,21 +38,19 @@ public class Client {
             public void run() {
                 while (true) {
                     try {
-                        Move mv = (Move) readStream.readObject();
-                        game.executeMove(mv);
+                        if (server.isConnected()) {
+                            try {
+                                Move mv = (Move) readStream.readObject();
+                                game.executeMove(mv);
+                            } catch (EOFException e) {
+                                return;
+                            }
+                        }
                     } catch (IOException | ClassNotFoundException e) {
-                        e.printStackTrace();
+                        return;
                     }
                 }
             }
         }).start();
-
-        while (ch.isGameFinished() == 'n');
-        if (ChessGame.winner == 'w' || ChessGame.winner == 'b') {
-            ch.displayWinner();
-        } else {
-            ch.displayStalemate();
-        }
-
     }
 }

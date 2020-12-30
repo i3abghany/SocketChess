@@ -16,18 +16,22 @@ public abstract class Piece extends JPanel {
     public abstract boolean isValidMove(Move m);
     public ArrayList<Move> getPossibleMoves() {
         ArrayList<Move> mvs = new ArrayList<>();
-        int initalX = this.getCurrSquare().getXCord();
-        int initalY = this.getCurrSquare().getYCord();
+        int initialX = this.getCurrSquare().getXCord();
+        int initialY = this.getCurrSquare().getYCord();
 
         for (int i = 0; i < Board.DIM; i++) {
             for (int j = 0; j < Board.DIM; j++) {
-                Move mv = new Move(initalX, initalY, i, j);
+                Move mv = new Move(initialX, initialY, i, j);
                 if (this.isValidMove(mv)) {
                     mvs.add(mv);
                 }
             }
         }
         return mvs;
+    }
+
+    public boolean canMove() {
+        return getPossibleMoves().size() != 0;
     }
 
     public void setBackgroundColor(Color c) {
