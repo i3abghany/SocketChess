@@ -5,7 +5,7 @@ public class King extends Piece {
     public King(String col, Square sq) {
         super(col, sq);
         this.name = "King";
-        this.ImageFileName = "C:\\Users\\Mahmo\\Desktop\\SocketChess\\img\\" + this.color + "_" + this.name + ".png";
+        this.ImageFileName = "img\\" + this.color + "_" + this.name + ".png";
     }
 
     @Override

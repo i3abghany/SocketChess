@@ -3,7 +3,7 @@ public class Pawn extends Piece {
     public Pawn(String col, Square sq) {
         super(col, sq);
         this.name = "pawn";
-        this.ImageFileName = "C:\\Users\\Mahmo\\Desktop\\SocketChess\\img\\" + this.color + "_" + this.name + ".png";
+        this.ImageFileName = "img\\" + this.color + "_" + this.name + ".png";
     }
 
     @Override
