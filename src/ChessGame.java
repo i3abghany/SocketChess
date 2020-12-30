@@ -1,9 +1,11 @@
+import javax.swing.*;
 import java.io.IOException;
 
 public class ChessGame {
     private final Board b;
     public static String myColor;
     public static String turnColor = "white";
+    public static char winner = 'n';
 
     public void executeMove(Move mv) {
         if (b.executeMove(mv)) {
@@ -12,17 +14,31 @@ public class ChessGame {
         }
     }
 
+    public char isGameFinished() {
+        return b.isGameFinished();
+    }
+
+    public Board getBoard() {
+        return b;
+    }
+
+    public void undoMove(Move mv) {
+        b.undoMove(mv);
+        b.refreshFrame();
+    }
+
     public boolean isStalemate() {
         return b.isStalemate();
     }
 
     public ChessGame(String col) throws IOException {
-        b = new Board();
         myColor = col;
+        b = new Board();
+        Board.playerColor = myColor;
     }
 
-    public static void main(String[] args) throws IOException, InterruptedException {
-        ChessGame c = new ChessGame("white");
-        c.executeMove(new Move(6, 0, 5, 2));
+    public void displayWinner() {
+        JLabel jl = new JLabel("Game has finished! the winner is the " + (winner == 'w' ? "white" : "black") + "!");
+        JOptionPane.showMessageDialog(b, jl, "Winner!", JOptionPane.INFORMATION_MESSAGE);
     }
 }

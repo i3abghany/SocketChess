@@ -46,5 +46,9 @@ public class Client {
                 }
             }
         }).start();
+
+        while (ch.isGameFinished() == 'n');
+        ch.displayWinner();
+
     }
 }

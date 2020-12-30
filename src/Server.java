@@ -38,7 +38,6 @@ public class Server {
         oos2.flush();
         System.out.println("Connected to client two! Assigned the color Black.");
 
-
         ois1 = new ObjectInputStream(is1);
         ois2 = new ObjectInputStream(is2);
 

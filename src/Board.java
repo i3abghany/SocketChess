@@ -7,14 +7,15 @@ import java.io.*;
 import java.util.ArrayList;
 
 public class Board extends JFrame {
-    static private final int DIM = 8;
     static private final int WIDTH_MARGIN = 15;
     static private final int HEIGHT_MARGIN = 38;
     static private Square[][] squares;
     static public ArrayList<Piece> pieces;
+    static public final int DIM = 8;
     public static Square prevSq = null;
     public static Square backupPrevSq = null;
     public static Square backupNextSq = null;
+    public static String playerColor;
 
     public Board() throws IOException {
         squares = new Square[DIM][DIM];
@@ -135,6 +136,9 @@ public class Board extends JFrame {
         Square initSquare = squares[mv.getInitialY()][mv.getInitialX()];
         Square nextSquare = squares[mv.getDestY()][mv.getDestX()];
 
+        Board.backupPrevSq = (Square)Board.cloneSwingComponent(initSquare);
+        Board.backupNextSq = (Square)Board.cloneSwingComponent(nextSquare);
+
         boolean validMove;
         if (mv.getP().getColor().equals(ChessGame.turnColor)) {
             validMove = mv.getP().isValidMove(mv);
@@ -150,12 +154,59 @@ public class Board extends JFrame {
         }
         return false;
     }
+    public void undoMove(Move mv) {
+        Square initSquare = squares[mv.getInitialY()][mv.getInitialX()];
+        Square nextSquare = squares[mv.getDestY()][mv.getDestX()];
+
+        nextSquare.removeCurrentPiece(false);
+        nextSquare.setCurrentPiece(Board.backupNextSq.getCurrentPiece());
+        nextSquare.setXCord(Board.backupNextSq.getXCord());
+        nextSquare.setYCord(Board.backupNextSq.getYCord());
+
+        initSquare.removeCurrentPiece(false);
+        initSquare.setCurrentPiece(Board.backupPrevSq.getCurrentPiece());
+        initSquare.setXCord(Board.backupPrevSq.getXCord());
+        initSquare.setYCord(Board.backupPrevSq.getYCord());
+    }
 
     static public Piece getPieceAtIndex(int i, int j) {
         return squares[j][i].getCurrentPiece();
     }
 
     public boolean isStalemate() {
-        return false;
+        return (Board.getKing("white").isKingTrapped() && !Board.getKing("white").kingInDanger())
+                || (Board.getKing("black").isKingTrapped() && !Board.getKing("black").kingInDanger());
     }
+
+    public char isGameFinished() {
+        King whiteKing = Board.getKing("white");
+        King blackKing = Board.getKing("black");
+
+        if (!whiteKing.kingInDanger() && !blackKing.kingInDanger())
+            return ChessGame.winner; // must be 'n'.
+
+        boolean whiteKingCantMove = whiteKing.isKingTrapped() && whiteKing.kingInDanger();
+        boolean canWhiteKingBeSaved = false;
+        if (whiteKingCantMove) {
+            canWhiteKingBeSaved = whiteKing.canKingBeSaved(this);
+        }
+        if (whiteKingCantMove && !canWhiteKingBeSaved) {
+            ChessGame.winner = 'b';
+            return ChessGame.winner;
+        }
+
+        boolean blackKingCantMove = whiteKing.isKingTrapped() && whiteKing.kingInDanger();
+        boolean canBlackKingBeSaved = false;
+        if (blackKingCantMove) {
+            canBlackKingBeSaved = blackKing.canKingBeSaved(this);
+        }
+        if (blackKingCantMove && !canBlackKingBeSaved) {
+            ChessGame.winner = 'w';
+        }
+        return ChessGame.winner;
+    }
+
+
+
 }
+

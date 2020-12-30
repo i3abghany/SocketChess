@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 public class Rook extends Piece {
     public Rook(String col, Square sq) {
         super(col, sq);

@@ -68,17 +68,4 @@ public class Move implements Serializable {
     public boolean isCrossing() {
         return initialX == destX || initialY == destY;
     }
-
-    public static byte[] serializeMove(Move mv) throws IOException {
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        ObjectOutputStream oos = new ObjectOutputStream(baos);
-        oos.writeObject(mv);
-        return baos.toByteArray();
-    }
-
-    public static Move deserializeMove(byte[] mv) throws IOException, ClassNotFoundException {
-        ByteArrayInputStream bais = new ByteArrayInputStream(mv);
-        ObjectInputStream ois = new ObjectInputStream(bais);
-        return (Move) ois.readObject();
-    }
 }

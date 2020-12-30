@@ -48,8 +48,12 @@ public class Square extends JPanel {
 
                 Move mv = new Move(initialX, initialY, destX, destY);
                 boolean validMove;
-                if (mv.getP().getColor().equals(ChessGame.turnColor)) {
-                    validMove = mv.getP().isValidMove(mv);
+                if (mv.getP().getColor().equals(ChessGame.turnColor) && mv.getP().getColor().equals(Board.playerColor)) {
+                    if (ChessGame.winner != 'n') {
+                        validMove = false;
+                    } else {
+                        validMove = mv.getP().isValidMove(mv);
+                    }
                 } else {
                     validMove = false;
                 }
