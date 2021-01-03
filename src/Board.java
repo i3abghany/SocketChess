@@ -153,7 +153,6 @@ public class Board extends JFrame {
         } else {
             validMove = false;
         }
-
         if (validMove) {
             nextSquare.removeCurrentPiece(mv.getCapturedP() != null);
             nextSquare.setCurrentPiece(initSquare.getCurrentPiece());

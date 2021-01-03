@@ -9,6 +9,7 @@ public class ChessGame {
 
     public void executeMove(Move mv) {
         if (b.executeMove(mv)) {
+            turnColor = turnColor.equals("white") ? "black" : "white";
             b.refreshFrame();
             char isFinished = isGameFinished();
             if (isFinished == 'w' || isFinished == 'b') {
@@ -16,8 +17,7 @@ public class ChessGame {
             } else if (isFinished == 's'){
                 ChessGame.displayStalemate();
             }
-            turnColor = turnColor.equals("white") ? "black" : "white";
-            Board.whoseTurn.setText(turnColor + "'s Turn!");
+            Board.whoseTurn.setText(turnColor + "'s turn!");
             b.refreshFrame();
         }
     }
