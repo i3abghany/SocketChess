@@ -33,10 +33,13 @@ public class King extends Piece {
                 continue;
             }
             Move mv = new Move(p.getCurrSquare().getXCord(), p.getCurrSquare().getYCord(), dX, dY);
+
+            // making a redundant piece in the destination square for the enemy pieces to check if they can kill it.
+            if (mv.getCapturedP() == null) {
+                mv.setCapturedP(new Pawn(this.color, new Square()));
+            }
+
             if (p.isValidMove(mv)) {
-                if (p instanceof Pawn) {
-                    return p.getCurrSquare().getXCord() != dY;
-                }
                 return true;
             }
         }

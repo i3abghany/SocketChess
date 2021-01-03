@@ -8,7 +8,7 @@ public class Pawn extends Piece {
 
     @Override
     public boolean isValidMove(Move move) {
-            switch (color) {
+            switch (this.color) {
             case "white":
                 if (Math.abs(move.getDestX() - move.getInitialX()) == 1
                         && move.getDestY() - move.getInitialY() == 1
@@ -27,7 +27,7 @@ public class Pawn extends Piece {
                 break;
         }
 
-        switch (color) {
+        switch (this.color) {
             case "white":
                 if (move.getInitialY() == 1
                         && move.getDestX() == move.getInitialX()
@@ -48,7 +48,7 @@ public class Pawn extends Piece {
                 break;
         }
 
-        switch (color) {
+        switch (this.color) {
             case "white":
                 if (move.getDestX() == move.getInitialX()
                         && move.getDestY() - move.getInitialY() == 1
