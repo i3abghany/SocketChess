@@ -26,7 +26,7 @@ public class Bishop extends Piece {
 
     public static boolean validateDiagonals(int initialX, int initialY, int destX, int destY) {
         if (initialX + initialY != destX + destY)
-            return false;
+            return true;
 
         if (initialX < destX && initialY < destY) {
             int intermediateY = initialY + 1;
