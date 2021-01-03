@@ -81,6 +81,12 @@ public class King extends Piece {
         outer_loop:
         for (Piece whitePiece : allyPieces) {
             ArrayList<Move> mvs = whitePiece.getPossibleMoves();
+            if (whitePiece instanceof Queen) {
+                for (int i = 0; i < mvs.size(); i++) {
+                    System.out.println(mvs.get(i).getInitialX() + " " + mvs.get(i).getInitialY());
+                    System.out.println(mvs.get(i).getDestX() + " " + mvs.get(i).getDestY());
+                }
+            }
             for (Move mv : mvs) {
                 b.executeMove(mv);
                 if (!this.kingInDanger()) {

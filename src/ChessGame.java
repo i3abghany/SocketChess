@@ -1,6 +1,5 @@
 import javax.swing.*;
 import java.io.IOException;
-import java.util.Locale;
 
 public class ChessGame {
     private static Board b;

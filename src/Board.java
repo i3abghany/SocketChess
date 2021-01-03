@@ -160,8 +160,10 @@ public class Board extends JFrame {
             initSquare.removeCurrentPiece(false);
             return true;
         }
+
         return false;
     }
+
     public void undoMove(Move mv) {
         Square initSquare = squares[mv.getInitialY()][mv.getInitialX()];
         Square nextSquare = squares[mv.getDestY()][mv.getDestX()];
@@ -216,14 +218,15 @@ public class Board extends JFrame {
         }
 
         if (!whiteKing.kingInDanger() && !blackKing.kingInDanger()) {
-            return ChessGame.winner; // must be 'n'.
+            return 'n';
         }
 
         boolean whiteKingCantMove = whiteKing.isKingTrapped() && whiteKing.kingInDanger();
-        boolean canWhiteKingBeSaved = false;
+        boolean canWhiteKingBeSaved = false ;
         if (whiteKingCantMove) {
             canWhiteKingBeSaved = whiteKing.canKingBeSaved(this);
         }
+
         if (whiteKingCantMove && !canWhiteKingBeSaved) {
             ChessGame.winner = 'b';
             return ChessGame.winner;

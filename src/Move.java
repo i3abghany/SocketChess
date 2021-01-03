@@ -62,7 +62,7 @@ public class Move implements Serializable {
     }
 
     public boolean isDiagonal() {
-        return initialX + initialY == destX + destY;
+        return Math.abs(initialX - destX) == Math.abs(initialY - destY);
     }
 
     public boolean isCrossing() {

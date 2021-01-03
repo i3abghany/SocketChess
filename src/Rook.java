@@ -14,6 +14,9 @@ public class Rook extends Piece {
         int destX = move.getDestX();
         int destY = move.getDestY();
 
+        if (!move.isCrossing())
+            return false;
+
         if (validateCrossings(initialX, initialY, destX, destY)) return false;
 
         if ((move.getCapturedP() == null)

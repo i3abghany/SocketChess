@@ -12,6 +12,9 @@ public class Bishop extends Piece {
 
         int destX = move.getDestX();
         int destY = move.getDestY();
+        if (!move.isDiagonal())
+            return false;
+
         if (validateDiagonals(initialX, initialY, destX, destY)) return false;
         if ((move.getCapturedP() == null)
                 || (move.getCapturedP() != null
@@ -25,9 +28,6 @@ public class Bishop extends Piece {
     }
 
     public static boolean validateDiagonals(int initialX, int initialY, int destX, int destY) {
-        if (initialX + initialY != destX + destY)
-            return true;
-
         if (initialX < destX && initialY < destY) {
             int intermediateY = initialY + 1;
             for (int i = initialX + 1; i < destX; i++, intermediateY++) {

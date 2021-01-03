@@ -13,6 +13,8 @@ public class Queen extends Piece{
         int destX = move.getDestX();
         int destY = move.getDestY();
 
+        if (!move.isDiagonal() && !move.isCrossing())
+            return false;
 
         if (move.isDiagonal() && Bishop.validateDiagonals(initialX, initialY, destX, destY))
             return false;
