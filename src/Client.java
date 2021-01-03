@@ -1,4 +1,5 @@
 import java.io.*;
+import java.net.ConnectException;
 import java.net.InetAddress;
 import java.net.Socket;
 
@@ -16,7 +17,14 @@ public class Client {
     public static void main(String[] args) throws IOException {
         InetAddress inetAddr = InetAddress.getLocalHost();
 
-        Socket server = new Socket(inetAddr, 22000);
+        Socket server;
+
+        try {
+            server = new Socket(inetAddr, 22000);
+        } catch (ConnectException e) {
+            System.out.println("Could not connect to the server.");
+            return;
+        }
 
         Client.ois = new ObjectInputStream(server.getInputStream());
 
