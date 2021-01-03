@@ -17,7 +17,11 @@ public class ChessGame {
             } else if (isFinished == 's'){
                 ChessGame.displayStalemate();
             }
-            Board.whoseTurn.setText(turnColor + "'s turn!");
+            if (isFinished == 'w' || isFinished == 'b') {
+                Board.whoseTurn.setText(isFinished == 'w' ? "White" : "Black" + " has won!");
+            } else {
+                Board.whoseTurn.setText(turnColor + "'s turn!");
+            }
             b.refreshFrame();
         }
     }

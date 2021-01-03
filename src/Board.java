@@ -40,7 +40,7 @@ public class Board extends JFrame {
                 super.add(squares[j][i]);
             }
         }
-        whoseTurn = new JLabel(ChessGame.turnColor + "'s Turn!");
+        whoseTurn = new JLabel(ChessGame.turnColor + "'s turn!");
         whoseTurn.setFont(new Font(null, Font.BOLD, 26));
         Square sq = new Square(9, 3, 200, 100);
         sq.add(whoseTurn);
