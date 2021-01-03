@@ -26,7 +26,7 @@ public class Board extends JFrame {
         initPieces();
         super.setSize(DIM * Square.SQUARE_WIDTH + WIDTH_MARGIN, DIM * Square.SQUARE_WIDTH + HEIGHT_MARGIN);
         super.add(new JPanel());
-        prevSq = new Square(10, 10);
+        prevSq = new Square();
         super.setResizable(false);
         super.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         super.setTitle("Chess. " + col + "'s Window.");
@@ -36,7 +36,7 @@ public class Board extends JFrame {
     private void initSquares() {
         for (int i = 0; i < DIM; i++) {
             for (int j = 0; j < DIM; j++) {
-                squares[j][i] = new Square(i, j); // reversed j and i !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                squares[j][i] = new Square(i, j);
                 super.add(squares[j][i]);
             }
         }

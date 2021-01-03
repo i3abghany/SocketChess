@@ -74,7 +74,7 @@ public class Square extends JPanel {
             if (nextSquare.getBorder() == null)
                 nextSquare.setBorder(b);
             else nextSquare.removeBorder();
-            Board.prevSq = new Square(10, 10);
+            Board.prevSq = new Square();
             return true;
         } else {
             nextSquare.setBorder(b);
@@ -132,6 +132,8 @@ public class Square extends JPanel {
         Board.prevSq.setCurrentPiece(Board.backupPrevSq.getCurrentPiece());
         Board.prevSq.setXCord(Board.backupPrevSq.getXCord());
         Board.prevSq.setYCord(Board.backupPrevSq.getYCord());
+
+        Board.prevSq = new Square();
     }
 
     public Square(int i, int j, int w, int h) {
