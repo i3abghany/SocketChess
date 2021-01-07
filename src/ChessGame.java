@@ -50,7 +50,7 @@ public class ChessGame {
     }
 
     public static void displayWinner() {
-        JLabel jl = new JLabel("Game has finished! the winner is the " + (winner == 'w' ? "white" : "black") + "!");
+        JLabel jl = new JLabel("Game has finished! the winner is " + (winner == 'w' ? "white" : "black") + "!");
         JOptionPane.showMessageDialog(ChessGame.b, jl, "Winner!", JOptionPane.INFORMATION_MESSAGE);
     }
 

@@ -1,4 +1,3 @@
-import org.imgscalr.Scalr;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;

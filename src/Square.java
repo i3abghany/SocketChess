@@ -24,7 +24,7 @@ public class Square extends JPanel {
                 Board.backupNextSq = (Square)Board.cloneSwingComponent((Square) me.getComponent());
 
                 Square nextSquare = (Square) me.getComponent();
-                if (isRedundantMove(nextSquare)) return;
+                if (onRedundantMove(nextSquare)) return;
 
                 int initialX = Board.prevSq.getXCord();
                 int initialY = Board.prevSq.getYCord();
@@ -69,7 +69,7 @@ public class Square extends JPanel {
         super.setSize(SQUARE_WIDTH, SQUARE_WIDTH);
     }
 
-    private boolean isRedundantMove(Square nextSquare) {
+    private boolean onRedundantMove(Square nextSquare) {
         if (Board.prevSq == nextSquare) {
             if (nextSquare.getBorder() == null)
                 nextSquare.setBorder(b);
@@ -91,10 +91,11 @@ public class Square extends JPanel {
     private void checkGameFinishedAfterMove(Move mv) {
         try {
             Client.moveDone(mv);
-            Board.whoseTurn.setText(ChessGame.turnColor + "'s Turn!");
+            Board.whoseTurn.setText(ChessGame.turnColor + "'s turn!");
             char isFinished = ChessGame.isGameFinished();
             if (isFinished == 'w' || isFinished == 'b') {
                 ChessGame.displayWinner();
+                Board.whoseTurn.setText(isFinished == 'w' ? "White" : "Black" + " has won!");
             } else if (isFinished == 's'){
                 ChessGame.displayStalemate();
             }
