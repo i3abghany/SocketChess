@@ -1,6 +1,7 @@
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class Server {
@@ -12,6 +13,8 @@ public class Server {
 
         ObjectInputStream ois2;
         ObjectOutputStream oos2;
+
+        System.out.println("The server has started! Waiting for clients.");
 
         ServerSocket server = new ServerSocket(22000);
 
@@ -38,8 +41,20 @@ public class Server {
         oos2.flush();
         System.out.println("Connected to client two! Assigned the color Black.");
 
-        ois1 = new ObjectInputStream(is1);
-        ois2 = new ObjectInputStream(is2);
+        try {
+            ois1 = new ObjectInputStream(is1);
+        } catch (SocketException e) {
+            System.out.println("Connection was reset by a client.");
+            client1.close();
+            return;
+        }
+        try {
+            ois2 = new ObjectInputStream(is2);
+        } catch (SocketException e) {
+            System.out.println("Connection was reset by a client.");
+            client2.close();
+            return;
+        }
 
         AtomicBoolean run1 = new AtomicBoolean(true);
         Thread th1 = new Thread(() -> {
@@ -63,8 +78,13 @@ public class Server {
         Thread th2 = new Thread(() -> {
             while(run2.get()) {
                 try {
-                    Move client1Move = (Move) ois1.readObject();
-                    oos2.writeObject(client1Move);
+                    try {
+                        Move client1Move = (Move) ois1.readObject();
+                        oos2.writeObject(client1Move);
+                    } catch (SocketException e) {
+                        System.out.println("Connection was reset by a client.");
+                        return;
+                    }
                 } catch (IOException | ClassNotFoundException e) {
                     run2.set(false);
                     try {
